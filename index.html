@@ -40,79 +40,79 @@
 
     <script>
       const vm = new Vue({
-        el: '#app',
-        data: {
-          isShow: false,
-          filterList: {},
-          goodsList: [
-            {
-              title: '上装',
-              typeList: [
-                '全部',
-                '针织衫',
-                '毛呢外套',
-                'T恤',
-                '羽绒服',
-                '棉衣',
-                '卫衣',
-                '风衣'
-              ],
-              id: 1
-            },
-            {
-              title: '裤装',
-              typeList: [
-                '全部',
-                '牛仔裤',
-                '小脚/铅笔裤',
-                '休闲裤',
-                '打底裤',
-                '哈伦裤'
-              ],
-              id: 2
-            },
-            {
-              title: '裙装',
-              typeList: [
-                '全部',
-                '连衣裙',
-                '半身裙',
-                '长袖连衣裙',
-                '中长款连衣裙'
-              ],
-              id: 3
-            }
-          ]
-        },
-        methods: {
-          handleClick(good, itemList, goodType, item) {
-            if (item === '全部') {
-              return
-            }
-            this.isShow = true
-            good.index = itemList
-            // this.filterList.push(item)
+        el: '#app'
+        // data: {
+        //   isShow: false,
+        //   filterList: {},
+        //   goodsList: [
+        //     {
+        //       title: '上装',
+        //       typeList: [
+        //         '全部',
+        //         '针织衫',
+        //         '毛呢外套',
+        //         'T恤',
+        //         '羽绒服',
+        //         '棉衣',
+        //         '卫衣',
+        //         '风衣'
+        //       ],
+        //       id: 1
+        //     },
+        //     {
+        //       title: '裤装',
+        //       typeList: [
+        //         '全部',
+        //         '牛仔裤',
+        //         '小脚/铅笔裤',
+        //         '休闲裤',
+        //         '打底裤',
+        //         '哈伦裤'
+        //       ],
+        //       id: 2
+        //     },
+        //     {
+        //       title: '裙装',
+        //       typeList: [
+        //         '全部',
+        //         '连衣裙',
+        //         '半身裙',
+        //         '长袖连衣裙',
+        //         '中长款连衣裙'
+        //       ],
+        //       id: 3
+        //     }
+        //   ]
+        // },
+        //   methods: {
+        //     handleClick(good, itemList, goodType, item) {
+        //       if (item === '全部') {
+        //         return
+        //       }
+        //       this.isShow = true
+        //       good.index = itemList
+        //       // this.filterList.push(item)
 
-            // this.filterList.splice(goodType, 1, item)
-            vm.$set(this.filterList, goodType, item)
-            //      新增item作为显示，而goodType作为给三行每一行，增减一个遍历的item，如果此处goodType写死为1的话，显示效果则为无论点击哪一行每一次只有一个显示
-          },
-          deleteFilterGoods(goodsKey) {
-            //点击删除
-            this.$delete(this.filterList, goodsKey)
-            // console.log(goodsKey)
-            //删除后active归位
-            this.goodsList[goodsKey].index = 0
-            this.changeShowFilter()
-            //goodsKey  为三行每一行的下标，第一行为0，第二行为1，第三行为2  区别v-for第二个参数很好区分，第二个参数一定代表循环数据的每一项的下标，在哪个数据里面循环就那个数据里的下标
-          },
-          //删除后如果filterList长度为0，就显示span内容
-          changeShowFilter() {
-            this.isShow = JSON.stringify(this.filterList) !== '{}'
-          }
-        }
+        //       // this.filterList.splice(goodType, 1, item)
+        //       vm.$set(this.filterList, goodType, item)
+        //       //      新增item作为显示，而goodType作为给三行每一行，增减一个遍历的item，如果此处goodType写死为1的话，显示效果则为无论点击哪一行每一次只有一个显示
+        //     },
+        //     deleteFilterGoods(goodsKey) {
+        //       //点击删除
+        //       this.$delete(this.filterList, goodsKey)
+        //       // console.log(goodsKey)
+        //       //删除后active归位
+        //       this.goodsList[goodsKey].index = 0
+        //       this.changeShowFilter()
+        //       //goodsKey  为三行每一行的下标，第一行为0，第二行为1，第三行为2  区别v-for第二个参数很好区分，第二个参数一定代表循环数据的每一项的下标，在哪个数据里面循环就那个数据里的下标
+        //     },
+        //     //删除后如果filterList长度为0，就显示span内容
+        //     changeShowFilter() {
+        //       this.isShow = JSON.stringify(this.filterList) !== '{}'
+        //     }
+        //   }
       })
-      vm.goodsList.forEach(item => vm.$set(item, 'index', 0))
+      // vm.goodsList.forEach(item => vm.$set(item, 'index', 0))
     </script>
   </body>
 </html>
