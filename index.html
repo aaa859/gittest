@@ -10,109 +10,97 @@
   </head>
   <body>
     <div id="app">
-      <div class="goods" v-for="(good,goodType) in  goodsList">
-        <div class="title">{{good.title}}</div>
-        <ul class="type-list" v-for="(item,itemList) in good.typeList">
-          <li
-            class="type"
-            :class="{active: itemList === good.index}"
-            @Click="handleClick(good,itemList,goodType,item)"
-          >
-            {{item}}
-          </li>
-        </ul>
-      </div>
-      <div class="choose-type">
-        <div>已选条件:</div>
-        <span class="no-goods" v-if="!isShow">
-          暂时没有选择过滤条件
-        </span>
-        <ul class="filter-list" v-else>
-          <li v-for="(list,goodsKey) in filterList">
-            {{list}}
-            <span class="delete-goods" @click="deleteFilterGoods(goodsKey)"
-              >x</span
-            >
-          </li>
-        </ul>
-      </div>
+     <div class="header">
+       <div class="container">
+         <div class="logo">todolist</div>
+         <div class="input-area">
+           <input type="text" @input = 'handleInput' :value = 'masks'>
+           <button @click = 'addMask'>添加</button>
+         </div>
+       </div>
+     </div>
+     <div class="container">
+       <h2>
+         <span>正在进行</span>
+         <span class = 'mask-num'>{{needDoList.length}}</span>
+       </h2>
+       <ul class = 'mask-list'>
+         <li v-for= '(doing,index) in needDoList' :key = 'doing.id' >
+           <div>
+             <input type="checkbox" @change = 'doCheck(index,"need")' >
+             <span>{{doing.title}}</span>
+           </div>
+           <button @click = 'deleteMask(index,"need")'>删除</button>
+         </li>
+       </ul>
+     </div>
+     <div class="container"> <h2>
+      <span>已经完成</span>
+      <span class = 'mask-num'>{{done.length}}</span>
+    </h2>
+    <ul class = 'mask-list complete-list'>
+      <li v-for = '(item ,index) in done' :key = 'item.id'>
+        <div>
+          <input type="checkbox" @change = 'doCheck(index,"dfasf")'>
+          <span>{{item.title}}</span>
+        </div>
+        <button @click = 'deleteMask(index,"complete")'>删除</button>
+      </li></div>
     </div>
 
     <script>
       const vm = new Vue({
-        el: '#app'
-        // data: {
-        //   isShow: false,
-        //   filterList: {},
-        //   goodsList: [
-        //     {
-        //       title: '上装',
-        //       typeList: [
-        //         '全部',
-        //         '针织衫',
-        //         '毛呢外套',
-        //         'T恤',
-        //         '羽绒服',
-        //         '棉衣',
-        //         '卫衣',
-        //         '风衣'
-        //       ],
-        //       id: 1
-        //     },
-        //     {
-        //       title: '裤装',
-        //       typeList: [
-        //         '全部',
-        //         '牛仔裤',
-        //         '小脚/铅笔裤',
-        //         '休闲裤',
-        //         '打底裤',
-        //         '哈伦裤'
-        //       ],
-        //       id: 2
-        //     },
-        //     {
-        //       title: '裙装',
-        //       typeList: [
-        //         '全部',
-        //         '连衣裙',
-        //         '半身裙',
-        //         '长袖连衣裙',
-        //         '中长款连衣裙'
-        //       ],
-        //       id: 3
-        //     }
-        //   ]
-        // },
-        //   methods: {
-        //     handleClick(good, itemList, goodType, item) {
-        //       if (item === '全部') {
-        //         return
-        //       }
-        //       this.isShow = true
-        //       good.index = itemList
-        //       // this.filterList.push(item)
+        el: '#app',
+        data:{
+          masks:'',
+          needDoList:[],
+          done:[]
 
-        //       // this.filterList.splice(goodType, 1, item)
-        //       vm.$set(this.filterList, goodType, item)
-        //       //      新增item作为显示，而goodType作为给三行每一行，增减一个遍历的item，如果此处goodType写死为1的话，显示效果则为无论点击哪一行每一次只有一个显示
-        //     },
-        //     deleteFilterGoods(goodsKey) {
-        //       //点击删除
-        //       this.$delete(this.filterList, goodsKey)
-        //       // console.log(goodsKey)
-        //       //删除后active归位
-        //       this.goodsList[goodsKey].index = 0
-        //       this.changeShowFilter()
-        //       //goodsKey  为三行每一行的下标，第一行为0，第二行为1，第三行为2  区别v-for第二个参数很好区分，第二个参数一定代表循环数据的每一项的下标，在哪个数据里面循环就那个数据里的下标
-        //     },
-        //     //删除后如果filterList长度为0，就显示span内容
-        //     changeShowFilter() {
-        //       this.isShow = JSON.stringify(this.filterList) !== '{}'
-        //     }
-        //   }
+        },
+        methods:{
+          //拿到输入框的值
+          handleInput(e){
+           this.masks = e.target.value;
+          },
+          //输入框的值保存到数组中，将数组循环渲染在页面上
+          addMask(){
+            if(this.masks === ''){
+              return
+            }
+            this.needDoList.push({
+              title:this.masks,
+              id:Math.random()
+            })
+            console.log(this.needDoList)
+
+            // console.log(this.needDoList)
+            //通过:value=mask,动态绑定
+            this.masks = '';
+          },
+          //点击正在进行前面checkbox变成已经完成，@change事件，通过展开运算符将数组展开为字符串
+          //splice(index,1)  从index项删除一位，一般index为当前项，也就是点击哪个删除哪个的意思
+          
+          //同一个点击绑定两个checkbox点击事件，通过传递type不同分别执行不同的操作
+          doCheck(index,type){
+            if(type === 'need'){
+              const finish = this.needDoList.splice(index,1)
+              this.done.push(...finish)
+            }else{
+              const finish = this.done.splice(index,1)
+              this.needDoList.push(...finish)
+            }
+            
+          },
+          //删除  同一个button方法绑定两个button，不同button通过传递不同的type区分，方法执行对应的操作
+          deleteMask(index,type){
+            if(type === 'need'){
+              this.needDoList.splice(index,1)
+            }else{
+              this.done.splice(index,1)
+            }
+          }
+        }
       })
-      // vm.goodsList.forEach(item => vm.$set(item, 'index', 0))
     </script>
   </body>
 </html>
