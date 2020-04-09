@@ -6,47 +6,63 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Document</title>
     <link rel="stylesheet" href="./index.css" />
+    <script src="./jquery.js"></script>
     <script src="./vue.js"></script>
   </head>
   <body>
     <div id="app">
-      {{msg}}
+      <div class="logo">
+        <img
+          src="https://www.baidu.com/img/bd_logo1.png?where=super"
+          title="点击一下，了解更多"
+        />
+      </div>
+
+      <div class="search-box">
+        <span class="search-area">
+          <input
+            type="text"
+            maxlength="100"
+            v-model="inputVal"
+            @focus="() => inputFocus = true"
+            @blur="() => inputFocus = false"
+          />
+          <span class="icon icon-paizhao"></span>
+        </span>
+        <span class="search-btn">百度一下</span>
+      </div>
+
+      <ul class="search-list" v-show="inputFocus && searchResList.length">
+        <li v-for="res in searchResList" :key="res">
+          {{ res }}
+        </li>
+      </ul>
     </div>
     <script>
       const vm = new Vue({
         el: '#app',
         data: {
-          msg: 'hello   world'
-        }
-        // methods: {
-        //   msgChange() {
-        //     console.log('msg的值改变了')
-        //   }
-        // },
-        // watch: {
-        //   // msg: function() {
-        //   //   console.log('msg的值改变了')
-        //   // }
-        //   // msg: 'msgChange'
-        //   msg: {
-        //     handler: function() {
-        //       console.log('msg的值改变了')
-        //     },
-        //     deep: true,      //深度侦听
-        //     immediate:true    //立刻调用函数，而不是等数据改变后
-        //   }
-        // }
-      })
-      vm.$watch(
-        'msg',
-        function() {
-          console.log('msg的值改变了')
+          inputVal: '',
+          searchResList: []
         },
-        {
-          deep: true,
-          immediate: true
+        methods: {
+          searchRes(res) {
+            this.searchResList = res.s
+          }
+        },
+        watch: {
+          inputVal() {
+            $.ajax({
+              dataType: 'jsonP',
+              url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
+              data: {
+                wd: this.inputVal,
+                cb: 'vm.searchRes'
+              }
+            })
+          }
         }
-      )
+      })
     </script>
   </body>
 </html>
