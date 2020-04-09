@@ -10,163 +10,43 @@
   </head>
   <body>
     <div id="app">
-      <div class="store">
-        <input type="checkbox" class="select-all" v-model="checkedAll" />
-        <span class="store-name">渡一教育</span>
-      </div>
-      <ul class="course-list">
-        <li class="course" v-for="course in courseList" :key="course.id">
-          <input
-            type="checkbox"
-            class="course-radio"
-            v-model="course.checked"
-          />
-          <div class="poster">
-            <img :src="course.poster" alt="" />
-          </div>
-          <div class="content">
-            <div class="title">{{course.title}}</div>
-            <div class="price-container">
-              <div class="price">{{course.price}}</div>
-              <div class="control-cart">
-                <button class="minus-cart" @click="controlCart('less',course)">
-                  -
-                </button>
-                <input
-                  type="text"
-                  class="cart-num"
-                  v-model.number="course.cart"
-                />
-                <button class="add-cart" @click="controlCart('more',course)">
-                  +
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-      <div class="control">
-        <div class="select">
-          <input type="checkbox" class="select-all" v-model="checkedAll" />
-          <span>全选</span>
-        </div>
-        <div class="price-container">
-          <span>合计</span>
-          <span class="price">{{selectTotalPrice}}</span>
-          <button class="accounts">结算{{selectNum}}</button>
-        </div>
-      </div>
+      {{msg}}
     </div>
     <script>
       const vm = new Vue({
         el: '#app',
         data: {
-          courseList: [
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i1/TB1VtAgdlWD3KVjSZFs3KIqkpXa_040950.jpg_80x80.jpg',
-              title: '渡一教育 CSS3 深度剖析',
-              price: 1299,
-              cart: 1,
-              id: 0
-            },
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i7/TB1_VJecBWD3KVjSZKPagip7FXa_045814.jpg_80x80.jpg',
-              title: '渡一教育 移动端开发课程',
-              price: 1148,
-              cart: 1,
-              id: 1595402664708
-            },
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i2/TB1J.Q4cQxz61VjSZFto7uDSVXa_010347.jpg_80x80.jpg',
-              title: '渡一教育 2019年 HTMLCSS零基础入学宝典',
-              price: 1,
-              cart: 1,
-              id: 1596305473062
-            },
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i2/TB1bHwlaCWD3KVjSZSgVbgCxVXa_032434.jpg_80x80.jpg',
-              title: '渡一教育 Web前端开发JavaScriptJs课',
-              price: 1,
-              cart: 1,
-              id: 1595413512182
-            },
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i2/TB1MJd3g4z1gK0jSZSgnHevwpXa_014447.jpg_80x80.jpg',
-              title: 'Web前端开发高级工程师全阶班【渡一教育】',
-              price: 12798,
-              cart: 1,
-              id: 1596302161181
-            },
-            {
-              poster:
-                'https://img.alicdn.com/bao/uploaded/i6/TB1xPeAbwaH3KVjSZFpjaLhKpXa_105848.jpg_80x80.jpg',
-              title: '渡一教育 Java零基础入门到精通（集合，泛型等）',
-              price: 1,
-              cart: 1,
-              id: 1596300025301
-            }
-          ]
-        },
-        computed: {
-          //计算属性的值都需要返回出去才可以用
-
-          // 1-2过渡 得到被选中的列表所有信息
-          selectList() {
-            return this.courseList.filter(course => course.checked)
-          },
-          //2得到选中的列表的价格相加的值,然后差值表达式渲染在页面上
-          selectTotalPrice() {
-            let price = 0
-            this.selectList.forEach(course => {
-              price += course.price * course.cart
-            })
-            return price
-          },
-          //3选中时得到结算的数量
-          selectNum() {
-            return this.selectList.length
-          },
-          //4全选或不全选,在courseList里面遍历数据,用计算属性只能六个每一个选上的时候，全选会选上，反过来则不行
-          // checkedAll() {
-          //   return this.courseList.every(course => course.checked)
-          // }
-          //4用计算属性  get实现六个每一个选上的时候，全选会选上，set传递参数val，实现点全选时候，六个全部选上
-          checkedAll: {
-            get() {
-              return this.courseList.every(course => course.checked)
-            },
-            set(val) {
-              this.courseList.forEach(course => (course.checked = val))
-            }
-          }
-        },
-        methods: {
-          //4点击按钮增加数量增加价格
-          controlCart(type, course) {
-            // let cartNum = course.cart
-            if (type === 'less') {
-              if (course.cart === 1) {
-                alert('亲，不能再减少了')
-              } else {
-                course.cart--
-              }
-            } else {
-              course.cart++
-            }
-          }
+          msg: 'hello   world'
         }
+        // methods: {
+        //   msgChange() {
+        //     console.log('msg的值改变了')
+        //   }
+        // },
+        // watch: {
+        //   // msg: function() {
+        //   //   console.log('msg的值改变了')
+        //   // }
+        //   // msg: 'msgChange'
+        //   msg: {
+        //     handler: function() {
+        //       console.log('msg的值改变了')
+        //     },
+        //     deep: true,      //深度侦听
+        //     immediate:true    //立刻调用函数，而不是等数据改变后
+        //   }
+        // }
       })
-      // 1 在实例外部给vm.courseList的每一项循环加上一个属性  checked 值为true,这样通过拿到数据后选择了谁得到一个新的列表,就是选中的列表来记录一下
-      vm.courseList.forEach(course => vm.$set(course, 'checked', false))
-      console.log(vm.courseList)
-
-      //计算属性或者方法用实例data里面数据的时候，用用this,而用模版里for循环的item in items,item直接拿来用，不用加this,一个计算属性里面用另一个计算属性的名字时，也要加this
-      //Property or method "less" is not defined on the instance but referenced during render这种报错是因为数据里面没有的数据，在视图里面想直接定义需要加上引号，不能直接定义，否则报错，加引号定义的，使用也要加引号,当然在视图里面直接用data里面的值不用this
+      vm.$watch(
+        'msg',
+        function() {
+          console.log('msg的值改变了')
+        },
+        {
+          deep: true,
+          immediate: true
+        }
+      )
     </script>
   </body>
 </html>
