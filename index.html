@@ -10,44 +10,41 @@
     <script src="./vue.js"></script>
   </head>
   <body>
-    <!-- 组件通信 -->
+    <!-- 自定义指令 -->
     <div id="app">
-      <my-cmp></my-cmp>
-      <my-cmp1></my-cmp1>
+      <input type="text" v-myShow="show" />
     </div>
     <script>
-      //混入   数据冲突时，组件数据权重大于混入权重
-      var mixin = {
-        data() {
-          return {
-            a: 1
-          }
+      //全局    钩子函数类似于Vue生命周期钩子函数
+      //bind  指令第一次绑定到元素时调用
+      //inserted  被绑定元素绑定到父节点时调用    v-focus 绑定到input上面
+      //update  所在组件的虚拟节点更新时调用，可能发生在虚拟节点更新之前
+      //componentupdated    指令所在的组件全部更新后
+      // unbind   指令与元素解绑之后调用
+      // Vue.directive('focus', {
+      //   inserted(el) {
+      //     el.focus()
+      //   }
+      // })
+      Vue.directive('myShow', {
+        bind(el, binding) {
+          const { value } = binding
+          const display = value ? '' : 'none'
+          el.style.display = display
         }
-      }
-      Vue.component('my-cmp', {
-        data() {
-          return {
-            a: 1
-          }
-        },
-        template: `<div >my-cmp</div>`
       })
-      Vue.component('my-cmp1', {
-        // data() {
-        //   return {
-        //     a: 1
-        //   }
-        // },
-        mixins: [mixin],
-        mounted() {
-          console.log(this.a)
-        },
-        template: `<div >my-cmp1</div>`
+      const vm = new Vue({
+        el: '#app',
+        data: {
+          show: false
+        }
+        //局部
+        // directives: {
+        //   focus: {}
+        // }
       })
 
-      const vm = new Vue({
-        el: '#app'
-      })
+      // 模拟v-show
     </script>
   </body>
 </html>
