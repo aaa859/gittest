@@ -10,84 +10,44 @@
     <script src="./vue.js"></script>
   </head>
   <body>
+    <!-- 组件通信 -->
     <div id="app">
-      <!-- <div :style='{fontSize:postFontSize + "em"}'>
-        <blog-post
-          :post="post"
-          v-for="post in posts"
-          :key="post.id"
-          @enlarge-text="postFontSize += $event"
-        ></blog-post> -->
-      <!-- 1父组件监听子组件事件  $event为第二个参数    -->
-      <!-- </div> -->
-      <base-input
-        @focus="focus"
-        :value1="name"
-        @input="name = $event"
-      ></base-input>
-      <!-- 此处也可以省略掉:value @input   变成v-model = 'name' -->
-      <!-- 此处$event是事件的值 -->
-
-      <!-- 2父组件监听不到的子组件自定义事件可以用修饰符或者可以在子组件用v-on = '$listeners' -->
+      <my-cmp></my-cmp>
+      <my-cmp1></my-cmp1>
     </div>
     <script>
-      // Vue.component('blog-post', {
-      //   props: {
-      //     post: Object
-      //   },
-      //   template: `<div>
-      //   <h3>{{post.title}}</h3>
-      //   <button @click = '$emit("enlarge-text",0.5)'>放大字号</button>
-      //   <div>{{post.content}}</div>
-      // </div>`
-      // 0子组件触发事件
-      // })
-
-      Vue.component('base-input', {
-        // mounted() {
-        //   console.log(this.$listeners)
-        // },
-        props: {
-          value1: String
-        },
-        template: `
-        <label> 姓名：
-        <input type = 'text' v-on = '$listeners' :value = 'value1' @input = '$emit("input",$event.target.value)'/>
-      </label>`
-      })
-      // 子组件   value属性需要值  value1    :value = 'value1'，然后props注册属性value1,父组件使用子组件时候赋值  value1 =’‘’‘’‘’，或者父组件在data里面取值，:value1 = '父组件data里定义的值'
-      //
-      const vm = new Vue({
-        el: '#app',
-        data: {
-          postFontSize: 1,
-          name: '前端',
-          posts: [
-            {
-              title: '今天是4月10号',
-              content: '我好想上班啊',
-              id: 1
-            },
-            {
-              title: '今天是4月10号',
-              content: '我好想上班啊',
-              id: 2
-            },
-            {
-              title: '今天是4月10号',
-              content: '我好想上班啊',
-              id: 3
-            }
-          ]
-        },
-        methods: {
-          focus() {
-            console.log('focus')
+      //混入   数据冲突时，组件数据权重大于混入权重
+      var mixin = {
+        data() {
+          return {
+            a: 1
           }
         }
+      }
+      Vue.component('my-cmp', {
+        data() {
+          return {
+            a: 1
+          }
+        },
+        template: `<div >my-cmp</div>`
       })
-      //$event.target.value   为输入框的值
-      //$event.target.checked   为复选框的值  值为boolean
+      Vue.component('my-cmp1', {
+        // data() {
+        //   return {
+        //     a: 1
+        //   }
+        // },
+        mixins: [mixin],
+        mounted() {
+          console.log(this.a)
+        },
+        template: `<div >my-cmp1</div>`
+      })
+
+      const vm = new Vue({
+        el: '#app'
+      })
     </script>
   </body>
 </html>
