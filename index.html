@@ -18,8 +18,8 @@
           :key="post.id"
           @enlarge-text="postFontSize += $event"
         ></blog-post> -->
-        <!-- 1父组件监听子组件事件 -->
-      </div>
+      <!-- 1父组件监听子组件事件 -->
+      <!-- </div> -->
       <base-input @focus="focus" :value="name"></base-input>
       <!-- 2父组件监听不到的子组件自定义事件可以用修饰符或者可以在子组件用v-on = '$listeners' -->
     </div>
@@ -33,17 +33,19 @@
       //   <button @click = '$emit("enlarge-text",0.5)'>放大字号</button>
       //   <div>{{post.content}}</div>
       // </div>`
-      //   // 子组件触发事件
+      // 子组件触发事件
       // })
 
       Vue.component('base-input', {
         // mounted() {
         //   console.log(this.$listeners)
         // },
-        props: 'name',
+        props: {
+          value: String
+        },
         template: `
         <label> 姓名：
-        <input type = 'text' v-on = '$listeners'/>
+        <input type = 'text' v-on = '$listeners' :value = 'value'/>
       </label>`
       })
       const vm = new Vue({
