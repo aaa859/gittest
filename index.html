@@ -18,9 +18,16 @@
           :key="post.id"
           @enlarge-text="postFontSize += $event"
         ></blog-post> -->
-      <!-- 1父组件监听子组件事件 -->
+      <!-- 1父组件监听子组件事件  $event为第二个参数    -->
       <!-- </div> -->
-      <base-input @focus="focus" :value="name"></base-input>
+      <base-input
+        @focus="focus"
+        :value1="name"
+        @input="name = $event"
+      ></base-input>
+      <!-- 此处也可以省略掉:value @input   变成v-model = 'name' -->
+      <!-- 此处$event是事件的值 -->
+
       <!-- 2父组件监听不到的子组件自定义事件可以用修饰符或者可以在子组件用v-on = '$listeners' -->
     </div>
     <script>
@@ -33,7 +40,7 @@
       //   <button @click = '$emit("enlarge-text",0.5)'>放大字号</button>
       //   <div>{{post.content}}</div>
       // </div>`
-      // 子组件触发事件
+      // 0子组件触发事件
       // })
 
       Vue.component('base-input', {
@@ -41,13 +48,15 @@
         //   console.log(this.$listeners)
         // },
         props: {
-          value: String
+          value1: String
         },
         template: `
         <label> 姓名：
-        <input type = 'text' v-on = '$listeners' :value = 'value'/>
+        <input type = 'text' v-on = '$listeners' :value = 'value1' @input = '$emit("input",$event.target.value)'/>
       </label>`
       })
+      // 子组件   value属性需要值  value1    :value = 'value1'，然后props注册属性value1,父组件使用子组件时候赋值  value1 =’‘’‘’‘’，或者父组件在data里面取值，:value1 = '父组件data里定义的值'
+      //
       const vm = new Vue({
         el: '#app',
         data: {
@@ -77,6 +86,8 @@
           }
         }
       })
+      //$event.target.value   为输入框的值
+      //$event.target.checked   为复选框的值  值为boolean
     </script>
   </body>
 </html>
