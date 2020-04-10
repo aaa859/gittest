@@ -11,55 +11,67 @@
   </head>
   <body>
     <div id="app">
-      <div class="logo">
-        <img
-          src="https://www.baidu.com/img/bd_logo1.png?where=super"
-          title="点击一下，了解更多"
-        />
+      <!-- <div :style='{fontSize:postFontSize + "em"}'>
+        <blog-post
+          :post="post"
+          v-for="post in posts"
+          :key="post.id"
+          @enlarge-text="postFontSize += $event"
+        ></blog-post> -->
+        <!-- 1父组件监听子组件事件 -->
       </div>
-
-      <div class="search-box">
-        <span class="search-area">
-          <input
-            type="text"
-            maxlength="100"
-            v-model="inputVal"
-            @focus="() => inputFocus = true"
-            @blur="() => inputFocus = false"
-          />
-          <span class="icon icon-paizhao"></span>
-        </span>
-        <span class="search-btn">百度一下</span>
-      </div>
-
-      <ul class="search-list" v-show="inputFocus && searchResList.length">
-        <li v-for="res in searchResList" :key="res">
-          {{ res }}
-        </li>
-      </ul>
+      <base-input @focus="focus" :value="name"></base-input>
+      <!-- 2父组件监听不到的子组件自定义事件可以用修饰符或者可以在子组件用v-on = '$listeners' -->
     </div>
     <script>
+      // Vue.component('blog-post', {
+      //   props: {
+      //     post: Object
+      //   },
+      //   template: `<div>
+      //   <h3>{{post.title}}</h3>
+      //   <button @click = '$emit("enlarge-text",0.5)'>放大字号</button>
+      //   <div>{{post.content}}</div>
+      // </div>`
+      //   // 子组件触发事件
+      // })
+
+      Vue.component('base-input', {
+        // mounted() {
+        //   console.log(this.$listeners)
+        // },
+        props: 'name',
+        template: `
+        <label> 姓名：
+        <input type = 'text' v-on = '$listeners'/>
+      </label>`
+      })
       const vm = new Vue({
         el: '#app',
         data: {
-          inputVal: '',
-          searchResList: []
+          postFontSize: 1,
+          name: '前端',
+          posts: [
+            {
+              title: '今天是4月10号',
+              content: '我好想上班啊',
+              id: 1
+            },
+            {
+              title: '今天是4月10号',
+              content: '我好想上班啊',
+              id: 2
+            },
+            {
+              title: '今天是4月10号',
+              content: '我好想上班啊',
+              id: 3
+            }
+          ]
         },
         methods: {
-          searchRes(res) {
-            this.searchResList = res.s
-          }
-        },
-        watch: {
-          inputVal() {
-            $.ajax({
-              dataType: 'jsonP',
-              url: 'https://sp0.baidu.com/5a1Fazu8AA54nxGko9WTAnF6hhy/su',
-              data: {
-                wd: this.inputVal,
-                cb: 'vm.searchRes'
-              }
-            })
+          focus() {
+            console.log('focus')
           }
         }
       })
