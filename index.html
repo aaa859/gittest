@@ -10,41 +10,46 @@
     <script src="./vue.js"></script>
   </head>
   <body>
-    <!-- 自定义指令 -->
+    <!-- 过滤器 -->
     <div id="app">
-      <input type="text" v-myShow="show" />
+      <!-- {{name | myFilter('学不动了') | myFilterA }} -->
+      {{name | capitalize}} {{money | myMoney}}
     </div>
     <script>
-      //全局    钩子函数类似于Vue生命周期钩子函数
-      //bind  指令第一次绑定到元素时调用
-      //inserted  被绑定元素绑定到父节点时调用    v-focus 绑定到input上面
-      //update  所在组件的虚拟节点更新时调用，可能发生在虚拟节点更新之前
-      //componentupdated    指令所在的组件全部更新后
-      // unbind   指令与元素解绑之后调用
-      // Vue.directive('focus', {
-      //   inserted(el) {
-      //     el.focus()
-      //   }
-      // })
-      Vue.directive('myShow', {
-        bind(el, binding) {
-          const { value } = binding
-          const display = value ? '' : 'none'
-          el.style.display = display
+      Vue.filter('myFilter', (val, a) => {
+        console.log(val, a)
+        return '好好学习前端'
+      })
+      Vue.filter('myFilterA', val => {
+        console.log(val)
+      })
+      //后面过滤器用前面过滤return出来的值，过滤器第一个值永远是不变的第一个为data的值，第二个多个才是前面过滤器return出来的值，第二个值才是传递进去的参数，如果多个过滤器，最后一个过滤器不return则页面为空
+
+      //过滤首字母大写
+      //如果value为空，则return什么都不做
+      Vue.filter('capitalize', val => {
+        if (!val) {
+          return
+          //判断value为空则什么都不做
         }
+        return val.charAt(0).toUpperCase() + val.slice(1)
+      })
+
+      //给money加上逗号
+      Vue.filter('myMoney', val => {
+        return val.toLocaleString()
       })
       const vm = new Vue({
         el: '#app',
         data: {
-          show: false
+          name: 'fdsgsdASFSgf',
+          money: 120000
         }
-        //局部
-        // directives: {
-        //   focus: {}
+        // filters:{
+        //   filter(){}
         // }
       })
-
-      // 模拟v-show
+      //在视图里面传的参数都要用引号扩起来，不让报错，实例未定义却渲染在模版上，如果是在实例里的定义了的数据则不用引号
     </script>
   </body>
 </html>
